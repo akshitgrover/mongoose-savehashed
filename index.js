@@ -24,29 +24,38 @@ const func = (Schema,options)=>{
 		});
 	}
 
-	Schema.statics.compareHashed = function(obj,hobj){
+	Schema.statics.compareHashed = function(obj,hobj,options){
 		var hdata = [];
 		if(!hobj){
 			hdata.push("password");
 		}
 		else{
-			hdata = hobj.keys();
-			console.log(hobj.keys());
+			hdata = Object.keys(hobj);
 		}
 		return new Promise((resolve,reject)=>{
 			this.find(obj).then((data)=>{
-				if(!data){
+				if(data.length == 0){
 					resolve(null);
 				}
 				var flag = [];
 				data.forEach((inst)=>{
-					hobj.keys().forEach((kinst)=>{
-						if(bcrypt.compareSync(hobj[kinst],inst[kinst])){
-							flag.push(data);
+					var f = 1;
+					hdata.forEach((kinst)=>{
+						if(!bcrypt.compareSync(hobj[kinst],inst[kinst])){
+							f = 0;
 						}
 					});
+					if(f == 1){
+						flag.push(inst);
+					}
 				});
-				if(flag.length == 1){
+				if(flag.length == 0){
+					resolve(null);
+				}
+				else if(options && options.size == 1){
+					resolve(flag[0]);
+				}
+				else if(flag.length == 1){
 					resolve(flag[0]);
 				}
 				else{

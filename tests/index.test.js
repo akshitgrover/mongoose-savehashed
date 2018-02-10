@@ -21,10 +21,10 @@ before((done)=>{
 
 });	
 
-describe("Mongoose Plugin Tests",()=>{
+describe("saveHashed Tests",()=>{
 
 	beforeEach((done)=>{
-		model.remove({username:"akshitgrover"}).then((data)=>{
+		model.remove({}).then((data)=>{
 			done();
 		}).catch((err)=>{
 			done(err);
@@ -50,13 +50,71 @@ describe("Mongoose Plugin Tests",()=>{
 		}).then((str)=>{
 			return model.findOne({username:"akshitgrover"});
 		}).then((fdata)=>{
-			console.log(fdata);
 			expect(bcrypt.compareSync("1516",fdata.password)).toBeTruthy();
 			expect(bcrypt.compareSync("1516",fdata.confirmpassword)).toBeTruthy();
 			done();
 		}).catch((err)=>{
 			done(err);
-		})
+		});
 	});
+
+});
+
+describe("compareHashed Tests",()=>{
+
+	before((done)=>{
+
+		model.remove({}).then((data)=>{
+			return model.create({username:"akshitgrover",password:"1516",confirmpassword:"1516"});
+		}).then((data)=>{
+			return data.saveHashed(["password","confirmpassword"]);
+		}).then((data)=>{
+			done();
+		}).catch((err)=>{
+			done(err);
+		});
+
+	});
+
+	it("Should Compare Hashed Password",(done)=>{
+		model.compareHashed({username:"akshitgrover"},{password:"1516"}).then((data)=>{
+			expect(data.username).toBe("akshitgrover");
+			done();
+		}).catch((err)=>{
+			done(err);
+		});
+	});
+
+	it("Should Compare Multiple Hashed Values",(done)=>{
+		model.compareHashed({username:"akshitgrover"},{password:"1516",confirmpassword:"1516"},{size:1}).then((data)=>{
+			expect(data.username).toBe("akshitgrover");
+			done();
+		}).catch((err)=>{
+			done(err);
+		});
+	});
+
+	it("Should Find Multiple Docs",(done)=>{
+		model.create({username:"akshitgrover",password:"1516",confirmpassword:"1516"}).then((data)=>{
+			return data.saveHashed(["password","confirmpassword"]);
+		}).then((data)=>{
+			return model.compareHashed({username:"akshitgrover"},{password:"1516",confirmpassword:"1516"});
+		}).then((data)=>{
+			expect(data[0].username).toBe("akshitgrover");
+			expect(data[1].username).toBe("akshitgrover");
+			done();	
+		}).catch((err)=>{
+			done(err);
+		});
+	});	
+
+	it("Should Find Single Doc When Multiple Docs Exists",(done)=>{
+		model.compareHashed({username:"akshitgrover"},{password:"1516",confirmpassword:"1516"},{size:1}).then((data)=>{
+			expect(data.username).toBe("akshitgrover");
+			done();	
+		}).catch((err)=>{
+			done(err);
+		});
+	});	
 
 });
