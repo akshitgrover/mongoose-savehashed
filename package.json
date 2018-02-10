@@ -1,30 +1,34 @@
 {
-  "name": "mongoose-savehashe",
-  "version": "1.0.0",
+  "name": "mongoose-savehashed",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "mocha ./tests/**.test.js"
   },
- "author":{
-    "name":"Akshit Grover",
-    "email":"akshit.grover2016@gmail.com",
-    "github":"https://github.com/akshitgrover"
+  "author": {
+    "name": "Akshit Grover",
+    "email": "akshit.grover2016@gmail.com",
+    "github": "https://github.com/akshitgrover"
   },
   "license": "ISC",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "mongoose": "^5.0.4"
   },
-  "repository":{
-    "type":"git",
-    "url":"https://github.com/akshitgrover/mongoose-savehashed"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akshitgrover/mongoose-savehashed"
   },
   "devDependencies": {
     "expect": "^22.2.2",
     "mocha": "^5.0.0"
   },
-  "keywords":[
-    "mongoose","hash","bcrpyt","hashsave","security"
+  "keywords": [
+    "mongoose",
+    "hash",
+    "bcrpyt",
+    "hashsave",
+    "security"
   ]
 }

@@ -111,7 +111,7 @@ User.create({username:"akshitgrover",password:"1516",secretKey:"151617"}).then((
 });
 ```
 
-## Calling compareHased
+## Calling compareHashed
 
 ### Consider userController.js
 
